@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import type { League, Match, Team } from "@/lib/types/football";
 import { demoLeague, demoMatches, demoTeamsList } from "@/lib/data/demo";
 import { fetchCompetitionMatches } from "./football-api";
@@ -19,8 +20,10 @@ export type FootballData = {
 /**
  * Busca os dados da liga com fallback em cascata: API real -> cache no Postgres -> dados demo.
  * Nunca lança erro — na pior das hipóteses, cai no modo demo (o app nunca fica inutilizável).
+ * Envolvida em `cache()` para rodar só uma vez por requisição, mesmo se generateMetadata
+ * e a página chamarem esta função separadamente.
  */
-export async function getFootballData(): Promise<FootballData> {
+export const getFootballData = cache(async (): Promise<FootballData> => {
   const hasApiKey = Boolean(process.env.FOOTBALL_API_KEY);
   const hasDatabase = Boolean(process.env.DATABASE_URL);
 
@@ -50,4 +53,4 @@ export async function getFootballData(): Promise<FootballData> {
   }
 
   return { league: demoLeague, teams: demoTeamsList, matches: demoMatches, source: "demo" };
-}
+});

@@ -15,9 +15,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FutScoreStats — Painel de Estatísticas de Futebol",
+  metadataBase: new URL("https://futscorestats.vercel.app"),
+  title: {
+    default: "FutScoreStats — Painel de Estatísticas de Futebol",
+    template: "%s · FutScoreStats",
+  },
   description:
-    "Painel de classificação, forma recente e estatísticas de times de futebol. Projeto de demonstração, sem odds ou apostas.",
+    "Classificação, forma recente e estatísticas de times do Campeonato Brasileiro Série A, com dados reais via football-data.org. Projeto estatístico — sem odds ou apostas.",
+  keywords: [
+    "FutScoreStats",
+    "estatísticas de futebol",
+    "Brasileirão",
+    "Campeonato Brasileiro",
+    "classificação",
+    "Next.js",
+  ],
+  robots: { index: true, follow: true },
+  openGraph: {
+    title: "FutScoreStats — Painel de Estatísticas de Futebol",
+    description:
+      "Classificação, forma recente e estatísticas de times do Campeonato Brasileiro Série A.",
+    type: "website",
+    locale: "pt_BR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FutScoreStats — Painel de Estatísticas de Futebol",
+    description:
+      "Classificação, forma recente e estatísticas de times do Campeonato Brasileiro Série A.",
+  },
 };
 
 export default function RootLayout({

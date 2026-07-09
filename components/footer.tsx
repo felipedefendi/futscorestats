@@ -3,8 +3,18 @@ export function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-5xl flex-col gap-2 px-4 py-8 text-sm text-muted-foreground sm:px-6">
         <p>
-          Dados de demonstração, gerados localmente para fins ilustrativos —
-          este projeto é apenas estatístico e não envolve odds ou apostas.
+          Dados via{" "}
+          <a
+            href="https://www.football-data.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-dotted hover:text-foreground"
+          >
+            football-data.org
+          </a>
+          , com modo demonstração como contingência caso a API esteja
+          indisponível — este projeto é apenas estatístico e não envolve odds
+          ou apostas.
         </p>
         <p>
           Feito por{" "}

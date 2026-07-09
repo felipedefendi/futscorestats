@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getFootballData } from "@/lib/services/league-data";
@@ -9,11 +10,24 @@ import { TeamGoalsChart } from "@/components/team-goals-chart";
 
 export const dynamic = "force-dynamic";
 
-export default async function TeamPage({
-  params,
-}: {
+type TeamPageProps = {
   params: Promise<{ id: string }>;
-}) {
+};
+
+export async function generateMetadata({ params }: TeamPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const { teams } = await getFootballData();
+  const team = teams.find((t) => t.id === id);
+
+  return {
+    title: team ? team.name : "Time não encontrado",
+    description: team
+      ? `Classificação, últimos e próximos jogos de ${team.name} no Campeonato Brasileiro Série A.`
+      : undefined,
+  };
+}
+
+export default async function TeamPage({ params }: TeamPageProps) {
   const { id } = await params;
   const { teams, matches } = await getFootballData();
   const team = teams.find((t) => t.id === id);
