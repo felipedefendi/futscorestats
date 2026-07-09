@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import type { Team } from "@/lib/types/football";
 
 const sizeClasses = {
@@ -13,6 +16,22 @@ export function TeamCrest({
   team: Team;
   size?: keyof typeof sizeClasses;
 }) {
+  const [imgFailed, setImgFailed] = useState(false);
+
+  if (team.crestUrl && !imgFailed) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- escudo remoto (crest oficial da API), tamanho pequeno e fixo
+      <img
+        src={team.crestUrl}
+        alt={team.name}
+        title={team.name}
+        loading="lazy"
+        onError={() => setImgFailed(true)}
+        className={`shrink-0 object-contain ${sizeClasses[size]}`}
+      />
+    );
+  }
+
   return (
     <span
       className={`inline-flex shrink-0 items-center justify-center rounded-full font-bold text-white ${sizeClasses[size]}`}

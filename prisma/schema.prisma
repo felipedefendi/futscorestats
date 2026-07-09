@@ -1,6 +1,7 @@
-// Camada de cache dos dados da API de futebol.
-// Usada a partir da fase de integração real (ver lib/services/football-api.ts);
-// o modo demo funciona inteiramente sem banco de dados.
+// Camada de cache dos dados da API de futebol (football-data.org).
+// A classificação NÃO é armazenada aqui — é sempre derivada de Team+Match
+// pela função pura buildStandings (mesma lógica usada no modo demo).
+// O modo demo funciona inteiramente sem banco de dados.
 
 generator client {
   provider = "prisma-client-js"
@@ -12,55 +13,38 @@ datasource db {
 }
 
 model League {
-  id        String     @id
-  name      String
-  country   String
-  season    String
-  standings Standing[]
-  matches   Match[]
-  updatedAt DateTime   @updatedAt
+  id            String    @id
+  name          String
+  country       String
+  season        String
+  lastFetchedAt DateTime?
+  teams         Team[]
+  matches       Match[]
 }
 
 model Team {
-  id         String     @id
-  name       String
-  shortName  String
-  crestUrl   String?
-  standings  Standing[]
-  homeMatches Match[]   @relation("HomeTeam")
-  awayMatches Match[]   @relation("AwayTeam")
-}
-
-model Standing {
-  id             String   @id @default(cuid())
-  league         League   @relation(fields: [leagueId], references: [id])
-  leagueId       String
-  team           Team     @relation(fields: [teamId], references: [id])
-  teamId         String
-  position       Int
-  played         Int
-  won            Int
-  draw           Int
-  lost           Int
-  goalsFor       Int
-  goalsAgainst   Int
-  points         Int
-  updatedAt      DateTime @updatedAt
-
-  @@unique([leagueId, teamId])
-}
-
-model Match {
   id          String   @id
   league      League   @relation(fields: [leagueId], references: [id])
   leagueId    String
-  homeTeam    Team     @relation("HomeTeam", fields: [homeTeamId], references: [id])
-  homeTeamId  String
-  awayTeam    Team     @relation("AwayTeam", fields: [awayTeamId], references: [id])
-  awayTeamId  String
-  homeScore   Int?
-  awayScore   Int?
-  status      String
-  matchDate   DateTime
-  updatedAt   DateTime @updatedAt
+  name        String
+  shortName   String
+  crestUrl    String?
+  colorFrom   String
+  colorTo     String
+  homeMatches Match[]  @relation("HomeTeam")
+  awayMatches Match[]  @relation("AwayTeam")
+}
+
+model Match {
+  id         String   @id
+  league     League   @relation(fields: [leagueId], references: [id])
+  leagueId   String
+  homeTeam   Team     @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  homeTeamId String
+  awayTeam   Team     @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  awayTeamId String
+  homeScore  Int?
+  awayScore  Int?
+  status     String
+  matchDate  DateTime
 }

@@ -4,6 +4,7 @@ export const teamSchema = z.object({
   id: z.string(),
   name: z.string(),
   shortName: z.string(),
+  crestUrl: z.string().optional(),
   colorFrom: z.string(),
   colorTo: z.string(),
 });
