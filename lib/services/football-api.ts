@@ -27,10 +27,11 @@ const apiMatchSchema = z.object({
   }),
 });
 
+// O objeto "competition" de topo não inclui o país (area) — isso só vem
+// dentro de cada partida. O nome do país é extraído da primeira partida.
 const apiResponseSchema = z.object({
   competition: z.object({
     name: z.string(),
-    area: z.object({ name: z.string() }),
   }),
   filters: z.object({ season: z.string().optional() }).optional(),
   matches: z.array(apiMatchSchema),
@@ -96,7 +97,9 @@ export async function fetchCompetitionMatches(competitionCode: string): Promise<
     league: {
       id: competitionCode,
       name: json.competition.name,
-      country: json.competition.area.name,
+      // A API retorna o país em inglês ("Brazil"); como o app é 100% em
+      // português e só lida com esta competição por enquanto, fixamos aqui.
+      country: "Brasil",
       season: json.filters?.season ?? String(new Date().getFullYear()),
     },
     teams: Array.from(teamsById.values()),
