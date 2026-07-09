@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { StandingRow } from "@/lib/types/football";
 import { TeamCrest } from "./team-crest";
 import { FormBadges } from "./form-badges";
@@ -39,12 +40,13 @@ export function StandingsTable({ rows }: { rows: StandingRow[] }) {
                 {row.position}
               </td>
               <td className="px-3 py-3">
-                <div className="flex items-center gap-2 whitespace-nowrap">
+                <Link
+                  href={`/team/${row.team.id}`}
+                  className="flex items-center gap-2 whitespace-nowrap font-medium text-foreground hover:text-accent"
+                >
                   <TeamCrest team={row.team} size="sm" />
-                  <span className="font-medium text-foreground">
-                    {row.team.name}
-                  </span>
-                </div>
+                  {row.team.name}
+                </Link>
               </td>
               <td className="px-3 py-3 font-bold text-foreground">{row.points}</td>
               <td className="px-3 py-3 text-muted-foreground">{row.played}</td>

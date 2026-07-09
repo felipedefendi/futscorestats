@@ -44,9 +44,11 @@ export type FetchedLeagueData = {
 };
 
 /**
- * Busca as partidas finalizadas de uma competição na football-data.org e
- * converte para os tipos internos do app. Lança erro se a chave não estiver
- * configurada ou a API falhar — quem chama decide o fallback (ver league-data.ts).
+ * Busca todas as partidas (finalizadas e futuras) de uma competição na
+ * football-data.org e converte para os tipos internos do app. Lança erro se
+ * a chave não estiver configurada ou a API falhar — quem chama decide o
+ * fallback (ver league-data.ts). Buscar também os jogos futuros permite
+ * mostrar "próximos jogos" na página do time.
  */
 export async function fetchCompetitionMatches(competitionCode: string): Promise<FetchedLeagueData> {
   const apiKey = process.env.FOOTBALL_API_KEY;
@@ -54,7 +56,7 @@ export async function fetchCompetitionMatches(competitionCode: string): Promise<
     throw new Error("FOOTBALL_API_KEY não configurada");
   }
 
-  const response = await fetch(`${API_BASE}/competitions/${competitionCode}/matches?status=FINISHED`, {
+  const response = await fetch(`${API_BASE}/competitions/${competitionCode}/matches`, {
     headers: { "X-Auth-Token": apiKey },
     cache: "no-store",
   });
